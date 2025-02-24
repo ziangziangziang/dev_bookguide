@@ -12,8 +12,7 @@ dateCreated: 2025-02-20T04:21:01.835Z
 
 ## Always Visualize your idea
 
-```kroki
-mermaid
+```mermaid
 journey
     title Information Delivering Efficiency
     section Text
@@ -29,8 +28,7 @@ Figures are worth a thousand words. Use them to explain your idea.
 
 But how to choose the right figure?
 
-```kroki
-mermaid
+```mermaid
 quadrantChart
     title "Choosing the Right Mermaid Figure Type"
     x-axis "Purpose: Data/Process → Structure/Architecture"
@@ -133,8 +131,7 @@ A satisfying git push should contain the following components:
 
 
 
-```kroki
-mermaid
+```mermaid
 ---
 title: Example Git diagram
 ---
