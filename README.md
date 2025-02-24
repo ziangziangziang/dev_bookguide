@@ -1,93 +1,183 @@
-# DevGuideline
+---
+title: Development Guideline
+description: Guideline for developing the HPCS Portal
+published: true
+date: 2025-02-20T04:52:15.275Z
+tags: 
+editor: markdown
+dateCreated: 2025-02-20T04:21:01.835Z
+---
+
+# Dev Guideline
+
+## Always Visualize your idea
+
+```kroki
+mermaid
+journey
+    title Information Delivering Efficiency
+    section Text
+      Poor text: 1
+      Nice text: 3
+      Fanstastic text: 4
+    section Figure
+      Poor pics: 3
+      Nice pics: 5
+      Fantastic pics: 7
+```
+Figures are worth a thousand words. Use them to explain your idea. 
+
+But how to choose the right figure?
+
+```kroki
+mermaid
+quadrantChart
+    title "Choosing the Right Mermaid Figure Type"
+    x-axis "Purpose: Data/Process → Structure/Architecture"
+    y-axis "Complexity: Simple → Complex"
+    quadrant-1 "Complex Structure/Architecture"
+    quadrant-2 "Complex Data/Process"
+    quadrant-3 "Simple Data/Process"
+    quadrant-4 "Simple Structure/Architecture"
+
+    "Flowchart": [0.4, 0.7]
+    "Sequence": [0.3, 0.6]
+    "Class D.": [0.7, 0.65]
+    "State D.": [0.45, 0.85]
+    "Entity Relationship D.": [0.75, 0.3]
+    "User Journey": [0.05, 0.25]
+    "Gantt": [0.25, 0.9]
+    "Pie Chart": [0.1, 0.1]
+    "Requirement D.": [0.8, 0.6]
+    "Gitgraph": [0.25, 0.3]
+    "C4 D.": [0.6, 0.7]
+    "Mindmaps": [0.6, 0.2]
+    "Timeline": [0.25, 0.85]
+    "Sankey": [0.35, 0.85]
+    "XY Chart": [0.1, 0.15]
+    "Block D.": [0.85, 0.15]
+    "Kanban": [0.1, 0.8]
+    "Architecture": [0.8, 0.8]
+```
+
+- Use `mermaid` when possible. Fallback to `plantuml` if necessary.
+*The wiki.js integrated mermaid is not the latest version. If you need a new feature, please use the [kroki](https://kroki.io/) service to render the mermaid diagram. Check the source code of this page for examples.*
+
+## Always Document the CODE & CHANGES
+
+Be a thoughtful developer. 
+
+```mermaid
+---
+title: Components of a GOOD GIT PUSH
+---
+erDiagram
+    GOOD_GIT_PUSH ||--o{ CODE : contains
+    GOOD_GIT_PUSH ||--o{ CHANGELOG : contains
+    GOOD_GIT_PUSH ||--o{ DOCUMENT : contains
+    GOOD_GIT_PUSH {
+        commit short_description
+
+    }
+    CODE {
+        header license_contact_date_description
+        code code
+        comment comment
+    }
+    CHANGELOG {
+        version_date stamp_of_change
+        Added new_feature
+        Changed changed_feature
+        Fixed bug_fixed
+    }
+    DOCUMENT {
+        api_name api_name
+        input format_input
+        output format_output
+    }
+```
+
+A satisfying git push should contain the following components:
+- **Code**: The code you wrote. 
+  - It should be well commented when being pushing to the `dev` branch.
+  - **Every functional file** (e.g. `.py`, `.js`) should have a header with the license, contact, date, and description.
+- **Changelog**: What's new in this push?
+  - All changes should be appended to the `CHANGELOG.md` file.
+  - The changelog should be in the following format:
+    ```markdown
+    ## [Version] - [Date]
+    ### Added
+    - New feature
+    ### Changed
+    - Changed feature
+    ### Fixed
+    - Bug fixed
+    ```
+- **Document**: The API/function you wrote.
+  - If the project is small, the document can be written in the `README.md` file.
+  - Otherwise, create markdown files in the `docs` folder.
+  - For each **external exposing** APIs or functions, document the following:
+    - API name and description
+    - Input format and example
+    - Output format and example
+- **Commit message**: A brief description of the change. Refer to [this post](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/).
+    - Recommend to use the `{type}({!scope}): {subject}` format.
+      - `type`: The type of change. `feat`(feature), `fix`(bug fix), `docs`(documentation), `style`(formatting), `refactor`(refactoring), `perf`(performance), `test`(testing), `chore`(other changes).
+      - `scope`: The scope of the change. Optional. It can be a module, a file, or a function.
+      - `subject`: A brief description of the change. It should be in the imperative mood and start with a verb. For example, `add`, `fix`, `update`, `remove`, etc.
+      - Example commit messages: `feat(api): add new API for user login`, `fix(auth): fix bug in user login`, `docs(api): update API document for user login`, `style(auth): format code for user login`, `refactor(auth): refactor code for user login`, `perf(auth): improve performance for user login`, `test(auth): add test for user login`, `chore(auth): update dependencies for user login`.
 
 
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+```kroki
+mermaid
+---
+title: Example Git diagram
+---
+gitGraph
+   commit id: "init"
+   commit
+   branch develop
+   checkout develop
+   commit
+   commit
+   checkout main
+   merge develop
+   commit
+   commit
+```
+
+
+```mermaid
+gantt
+    dateFormat  YYYY-MM-DD
+    title       HPC Portal Roadmap
+    excludes    weekends
+
+    section Planning
+    Requirements Gathering              :done,    req1, 2025-03-01,2025-03-07
+    Define Metrics                      :done,    req2, 2025-03-08, 2025-03-14
+    Project Kickoff                     :milestone, kickoff, 2025-03-15, 0d
+
+    section Development
+    Design Portal Architecture          :done,    des1, 2025-03-16, 2025-03-22
+    Develop Compute Metrics Module      :active,  dev1, 2025-03-23, 10d
+    Develop Storage Metrics Module      :         dev2, after dev1, 10d
+    Integrate Compute and Storage Modules :        dev3, after dev2, 7d
+
+    section Testing
+    Unit Testing                        :         test1, after dev3, 7d
+    Integration Testing                 :         test2, after test1, 7d
+    User Acceptance Testing             :         test3, after test2, 10d
+
+    section Deployment
+    Prepare Deployment Plan             :         dep1, after test3, 5d
+    Deploy to Staging                   :         dep2, after dep1, 3d
+    Final Review and Sign-off           :milestone, final, after dep2, 0d
+    Deploy to Production                :         dep3, after final, 3d
 
 ```
-cd existing_repo
-git remote add origin https://easternsawwhet.stjude.org/gitlab/policyhub/devguideline.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://easternsawwhet.stjude.org/gitlab/policyhub/devguideline/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
