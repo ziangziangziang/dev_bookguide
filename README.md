@@ -2,7 +2,7 @@
 title: Development Guideline
 description: Guideline for developing the HPCS Portal
 published: true
-date: 2025-02-20T04:52:15.275Z
+date: 2025-02-24T04:52:15.275Z
 tags: 
 editor: markdown
 dateCreated: 2025-02-20T04:21:01.835Z
@@ -10,7 +10,9 @@ dateCreated: 2025-02-20T04:21:01.835Z
 
 # Dev Guideline
 
-## Always Visualize your idea
+[TOC]
+
+## Write Visually
 
 ```mermaid
 journey
@@ -24,9 +26,10 @@ journey
       Nice pics: 5
       Fantastic pics: 7
 ```
-Figures are worth a thousand words. Use them to explain your idea. 
+Figures worth more, especially when they are well designed.
 
-But how to choose the right figure?
+
+### The Right Figure Type
 
 ```mermaid
 quadrantChart
@@ -58,12 +61,13 @@ quadrantChart
     "Architecture": [0.8, 0.8]
 ```
 
-- Use `mermaid` when possible. Fallback to `plantuml` if necessary.
-*The wiki.js integrated mermaid is not the latest version. If you need a new feature, please use the [kroki](https://kroki.io/) service to render the mermaid diagram. Check the source code of this page for examples.*
+Here are some extended notes on creating figures in markdown:
+- For the ease of editing, use `mermaid` when possible. Fallback to `plantuml` if necessary. Use picture files or draw.io only when the above two options are not available. Attach the code generating the picture if possible.
+- The wiki.js integrated mermaid is not the latest version. If you need a new feature, please use the [kroki](https://kroki.io/) service to render the mermaid diagram. Check the source code of this page for examples.
 
-## Always Document the CODE & CHANGES
+## Document CHANGES Even Tiny
 
-Be a thoughtful developer. 
+Collaboration means we need to develop on other's shoulder. Document every change when you push, even if it is tiny. 
 
 ```mermaid
 ---
@@ -120,34 +124,90 @@ A satisfying git push should contain the following components:
     - Output format and example
 - **Commit message**: A brief description of the change. Refer to [this post](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/).
     - Recommend to use the `{type}({!scope}): {subject}` format.
-      - `type`: The type of change. `feat`(feature), `fix`(bug fix), `docs`(documentation), `style`(formatting), `refactor`(refactoring), `perf`(performance), `test`(testing), `chore`(other changes).
+      - `type`: The type of change. `feat`(feature), `fix`(bug fix), `docs`(documentation), `style`(formatting), `refactor`(refactoring), `perf`(performance), `test`(testing), `chore`(other changes), `merge`(merging branches).
       - `scope`: The scope of the change. Optional. It can be a module, a file, or a function.
       - `subject`: A brief description of the change. It should be in the imperative mood and start with a verb. For example, `add`, `fix`, `update`, `remove`, etc.
       - Example commit messages: `feat(api): add new API for user login`, `fix(auth): fix bug in user login`, `docs(api): update API document for user login`, `style(auth): format code for user login`, `refactor(auth): refactor code for user login`, `perf(auth): improve performance for user login`, `test(auth): add test for user login`, `chore(auth): update dependencies for user login`.
 
+## Push to `dev`. Merge to `main`. Release with tags.
 
-
-
-
-
+Ideally, three branches are enough for the project:
+- `dev`: The development branch. All changes should be pushed to this branch.
+- `main`: The main branch. This branch should be stable and ready for production.
+- `hotfix`: The hotfix branch. The branch take care of bugs found during production. It should be merged to `main` and `dev` branches.
 
 ```mermaid
 ---
-title: Example Git diagram
+title: Three-branch strategy
 ---
 gitGraph
-   commit id: "init"
-   commit
-   branch develop
-   checkout develop
-   commit
-   commit
-   checkout main
-   merge develop
-   commit
-   commit
+  commit id: "init"
+  branch hotfix
+  branch develop
+  checkout develop
+  commit id: "feat: add new feature"
+  commit id: "test: add test for new feature"
+  checkout hotfix
+  commit id: "fix: fix bug in main"
+  checkout main
+  merge hotfix id: "merge hotfix to main"
+  checkout develop
+  merge hotfix id: "merge hotfix to develop"
+  commit id: "fix: fix bug in new feature"
+  commit id: "fix: fix bug in new feature"
+  checkout main
+  merge develop
+  commit id: "release" type: HIGHLIGHT tag: "v1.0.0"
+  checkout develop
+  commit id: "feat: add another feature"
 ```
 
+Then, why do people use `release` branch? The benefits are:
+- for **testing**: The `release` branch can be used for testing the release candidate before merging to `main`.
+- for **continuous development**: It's easy to revisit the release branch and do bug fixing. Especially when the main branch is far ahead of the target release branch.
+
+A with-release branch strategy is shown below:
+```mermaid
+---
+title: With-release branch strategy
+---
+gitGraph
+    commit id: "Initial commit"
+    branch release/v1.1.0
+    branch hotfix
+    branch develop
+    checkout develop
+    commit id: "feat: add new feature"
+    commit id: "test: add test for new feature"
+    
+    checkout main
+    checkout hotfix
+    commit id: "fix: critical bug in production"
+    
+    checkout main
+    merge hotfix tag: "v1.0.1" id: "Merge hotfix into main"
+    
+    checkout develop
+    merge hotfix id: "Merge hotfix into develop"
+    
+    checkout develop
+    commit id: "fix: bug in new feature"
+    commit id: "fix: regression fix"
+    
+    checkout main
+    checkout release/v1.1.0
+    merge develop id: "Prepare release candidate"
+    commit id: "chore: update version" tag: "RC1"
+    
+    checkout main
+    merge release/v1.1.0 tag: "v1.1.0" type: HIGHLIGHT
+    
+    checkout develop
+    merge release/v1.1.0 id: "Sync release changes"
+    
+    checkout develop
+    commit id: "feat: add another feature"
+```
 
 ```mermaid
 gantt
