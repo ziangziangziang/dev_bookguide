@@ -129,7 +129,7 @@ A satisfying git push should contain the following components:
       - `subject`: A brief description of the change. It should be in the imperative mood and start with a verb. For example, `add`, `fix`, `update`, `remove`, etc.
       - Example commit messages: `feat(api): add new API for user login`, `fix(auth): fix bug in user login`, `docs(api): update API document for user login`, `style(auth): format code for user login`, `refactor(auth): refactor code for user login`, `perf(auth): improve performance for user login`, `test(auth): add test for user login`, `chore(auth): update dependencies for user login`.
 
-## Push to `dev`. Merge to `main`. Release with tags.
+## Branch Strategy
 
 Ideally, three branches are enough for the project:
 - `dev`: The development branch. All changes should be pushed to this branch.
@@ -209,32 +209,41 @@ gitGraph
     commit id: "feat: add another feature"
 ```
 
+Two above branch srategies are legit in our development. The three-branch strategy is simple and easy to understand. The with-release branch strategy is more complex but provides more flexibility and control over the release process.
+
+In this project, we will use the three-branch strategy. I give the following reasons:
+1. The project documents a development guideline. We only have one guideline at a time. The development is quite linear.
+2. When it comes to bug fixing. We fix bases in the previous commit. 
+
+Actually, the `hotfix` branch is not necessary in this repo. We can just use the `dev` branch to fix bugs. But I prefer to keep the `hotfix` branch for the sake of clarity and simplicity. The `hotfix` branch is a good practice for future projects.
+
+
+## Code Review & Merge
+
 ```mermaid
-gantt
-    dateFormat  YYYY-MM-DD
-    title       HPC Portal Roadmap
-    excludes    weekends
+journey
+    title Code Review and Merge Process
 
-    section Planning
-    Requirements Gathering              :done,    req1, 2025-03-01,2025-03-07
-    Define Metrics                      :done,    req2, 2025-03-08, 2025-03-14
-    Project Kickoff                     :milestone, kickoff, 2025-03-15, 0d
+    section 1. Development
+      Write Code: 5: Developer
+      Write Unit Tests: 3: Developer
+      Local Testing: 4: Developer
 
-    section Development
-    Design Portal Architecture          :done,    des1, 2025-03-16, 2025-03-22
-    Develop Compute Metrics Module      :active,  dev1, 2025-03-23, 10d
-    Develop Storage Metrics Module      :         dev2, after dev1, 10d
-    Integrate Compute and Storage Modules :        dev3, after dev2, 7d
+    section 2. Pull/Merge Request
+      Create PR: 2: Developer
+      Code Review: 5: Reviewer, Maintainer
+      Address Comments: 3: Developer
 
-    section Testing
-    Unit Testing                        :         test1, after dev3, 7d
-    Integration Testing                 :         test2, after test1, 7d
-    User Acceptance Testing             :         test3, after test2, 10d
-
-    section Deployment
-    Prepare Deployment Plan             :         dep1, after test3, 5d
-    Deploy to Staging                   :         dep2, after dep1, 3d
-    Final Review and Sign-off           :milestone, final, after dep2, 0d
-    Deploy to Production                :         dep3, after final, 3d
-
+    section 3. Merge
+      Approve PR: 1: Maintainer
+      Merge to Main: 2: Maintainer
+      Release: 4: Maintainer
 ```
+
+A typical code review and merge process consists of three steps:
+1. **Development**: Write code and unit tests. Run local tests to ensure the code works as expected.
+2. **Pull/Merge Request**: Create a pull/merge request. The reviewer will review the code and provide comments. The developer will address the comments and update the code. The maintainer can be the reviewer, the colleagues can also peer review the code.
+3. **Merge**: The maintainer will approve the pull/merge request and merge the code to the main branch. The maintainer will also release the new version of the code. The release process can be automated using CI/CD.
+
+
+
