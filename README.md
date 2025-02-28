@@ -1,93 +1,249 @@
-# DevGuideline
+---
+title: Development Guideline
+description: Guideline for developing the HPCS Portal
+published: true
+date: 2025-02-24T04:52:15.275Z
+tags: 
+editor: markdown
+dateCreated: 2025-02-20T04:21:01.835Z
+---
 
+# Dev Guideline
 
+[TOC]
 
-## Getting started
+## Write Visually
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+```mermaid
+journey
+    title Information Delivering Efficiency
+    section Text
+      Poor text: 1
+      Nice text: 3
+      Fanstastic text: 4
+    section Figure
+      Poor pics: 3
+      Nice pics: 5
+      Fantastic pics: 7
 ```
-cd existing_repo
-git remote add origin https://easternsawwhet.stjude.org/gitlab/policyhub/devguideline.git
-git branch -M main
-git push -uf origin main
+Figures worth more, especially when they are well designed.
+
+
+### The Right Figure Type
+
+```mermaid
+quadrantChart
+    title "Choosing the Right Mermaid Figure Type"
+    x-axis "Purpose: Data/Process → Structure/Architecture"
+    y-axis "Complexity: Simple → Complex"
+    quadrant-1 "Complex Structure/Architecture"
+    quadrant-2 "Complex Data/Process"
+    quadrant-3 "Simple Data/Process"
+    quadrant-4 "Simple Structure/Architecture"
+
+    "Flowchart": [0.4, 0.7]
+    "Sequence": [0.3, 0.6]
+    "Class D.": [0.7, 0.65]
+    "State D.": [0.45, 0.85]
+    "Entity Relationship D.": [0.75, 0.3]
+    "User Journey": [0.05, 0.25]
+    "Gantt": [0.25, 0.9]
+    "Pie Chart": [0.1, 0.1]
+    "Requirement D.": [0.8, 0.6]
+    "Gitgraph": [0.25, 0.3]
+    "C4 D.": [0.6, 0.7]
+    "Mindmaps": [0.6, 0.2]
+    "Timeline": [0.25, 0.85]
+    "Sankey": [0.35, 0.85]
+    "XY Chart": [0.1, 0.15]
+    "Block D.": [0.85, 0.15]
+    "Kanban": [0.1, 0.8]
+    "Architecture": [0.8, 0.8]
 ```
 
-## Integrate with your tools
+Here are some extended notes on creating figures in markdown:
+- For the ease of editing, use `mermaid` when possible. Fallback to `plantuml` if necessary. Use picture files or draw.io only when the above two options are not available. Attach the code generating the picture if possible.
+- The wiki.js integrated mermaid is not the latest version. If you need a new feature, please use the [kroki](https://kroki.io/) service to render the mermaid diagram. Check the source code of this page for examples.
 
-- [ ] [Set up project integrations](https://easternsawwhet.stjude.org/gitlab/policyhub/devguideline/-/settings/integrations)
+## Document CHANGES Even Tiny
 
-## Collaborate with your team
+Collaboration means we need to develop on other's shoulder. Document every change when you push, even if it is tiny. 
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```mermaid
+---
+title: Components of a GOOD GIT PUSH
+---
+erDiagram
+    GOOD_GIT_PUSH ||--o{ CODE : contains
+    GOOD_GIT_PUSH ||--o{ CHANGELOG : contains
+    GOOD_GIT_PUSH ||--o{ DOCUMENT : contains
+    GOOD_GIT_PUSH {
+        commit short_description
 
-## Test and Deploy
+    }
+    CODE {
+        header license_contact_date_description
+        code code
+        comment comment
+    }
+    CHANGELOG {
+        version_date stamp_of_change
+        Added new_feature
+        Changed changed_feature
+        Fixed bug_fixed
+    }
+    DOCUMENT {
+        api_name api_name
+        input format_input
+        output format_output
+    }
+```
 
-Use the built-in continuous integration in GitLab.
+A satisfying git push should contain the following components:
+- **Code**: The code you wrote. 
+  - It should be well commented when being pushing to the `dev` branch.
+  - **Every functional file** (e.g. `.py`, `.js`) should have a header with the license, contact, date, and description.
+- **Changelog**: What's new in this push?
+  - All changes should be appended to the `CHANGELOG.md` file.
+  - The changelog should be in the following format:
+    ```markdown
+    ## [Version] - [Date]
+    ### Added
+    - New feature
+    ### Changed
+    - Changed feature
+    ### Fixed
+    - Bug fixed
+    ```
+- **Document**: The API/function you wrote.
+  - If the project is small, the document can be written in the `README.md` file.
+  - Otherwise, create markdown files in the `docs` folder.
+  - For each **external exposing** APIs or functions, document the following:
+    - API name and description
+    - Input format and example
+    - Output format and example
+- **Commit message**: A brief description of the change. Refer to [this post](https://github.blog/developer-skills/github/write-better-commits-build-better-projects/).
+    - Recommend to use the `{type}({!scope}): {subject}` format.
+      - `type`: The type of change. `feat`(feature), `fix`(bug fix), `docs`(documentation), `style`(formatting), `refactor`(refactoring), `perf`(performance), `test`(testing), `chore`(other changes), `merge`(merging branches).
+      - `scope`: The scope of the change. Optional. It can be a module, a file, or a function.
+      - `subject`: A brief description of the change. It should be in the imperative mood and start with a verb. For example, `add`, `fix`, `update`, `remove`, etc.
+      - Example commit messages: `feat(api): add new API for user login`, `fix(auth): fix bug in user login`, `docs(api): update API document for user login`, `style(auth): format code for user login`, `refactor(auth): refactor code for user login`, `perf(auth): improve performance for user login`, `test(auth): add test for user login`, `chore(auth): update dependencies for user login`.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Branch Strategy
 
-***
+Ideally, three branches are enough for the project:
+- `dev`: The development branch. All changes should be pushed to this branch.
+- `main`: The main branch. This branch should be stable and ready for production.
+- `hotfix`: The hotfix branch. The branch take care of bugs found during production. It should be merged to `main` and `dev` branches.
 
-# Editing this README
+```mermaid
+---
+title: Three-branch strategy
+---
+gitGraph
+  commit id: "init"
+  branch hotfix
+  branch develop
+  checkout develop
+  commit id: "feat: add new feature"
+  commit id: "test: add test for new feature"
+  checkout hotfix
+  commit id: "fix: fix bug in main"
+  checkout main
+  merge hotfix id: "merge hotfix to main"
+  checkout develop
+  merge hotfix id: "merge hotfix to develop"
+  commit id: "fix: fix bug in new feature"
+  commit id: "fix: fix bug in new feature"
+  checkout main
+  merge develop
+  commit id: "release" type: HIGHLIGHT tag: "v1.0.0"
+  checkout develop
+  commit id: "feat: add another feature"
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Then, why do people use `release` branch? The benefits are:
+- for **testing**: The `release` branch can be used for testing the release candidate before merging to `main`.
+- for **continuous development**: It's easy to revisit the release branch and do bug fixing. Especially when the main branch is far ahead of the target release branch.
 
-## Suggestions for a good README
+A with-release branch strategy is shown below:
+```mermaid
+---
+title: With-release branch strategy
+---
+gitGraph
+    commit id: "Initial commit"
+    branch release/v1.1.0
+    branch hotfix
+    branch develop
+    checkout develop
+    commit id: "feat: add new feature"
+    commit id: "test: add test for new feature"
+    
+    checkout main
+    checkout hotfix
+    commit id: "fix: critical bug in production"
+    
+    checkout main
+    merge hotfix tag: "v1.0.1" id: "Merge hotfix into main"
+    
+    checkout develop
+    merge hotfix id: "Merge hotfix into develop"
+    
+    checkout develop
+    commit id: "fix: bug in new feature"
+    commit id: "fix: regression fix"
+    
+    checkout main
+    checkout release/v1.1.0
+    merge develop id: "Prepare release candidate"
+    commit id: "chore: update version" tag: "RC1"
+    
+    checkout main
+    merge release/v1.1.0 tag: "v1.1.0" type: HIGHLIGHT
+    
+    checkout develop
+    merge release/v1.1.0 id: "Sync release changes"
+    
+    checkout develop
+    commit id: "feat: add another feature"
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Two above branch srategies are legit in our development. The three-branch strategy is simple and easy to understand. The with-release branch strategy is more complex but provides more flexibility and control over the release process.
 
-## Name
-Choose a self-explaining name for your project.
+In this project, we will use the three-branch strategy. I give the following reasons:
+1. The project documents a development guideline. We only have one guideline at a time. The development is quite linear.
+2. When it comes to bug fixing. We fix bases in the previous commit. 
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Actually, the `hotfix` branch is not necessary in this repo. We can just use the `dev` branch to fix bugs. But I prefer to keep the `hotfix` branch for the sake of clarity and simplicity. The `hotfix` branch is a good practice for future projects.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Code Review & Merge
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```mermaid
+journey
+    title Code Review and Merge Process
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+    section 1. Development
+      Write Code: 5: Developer
+      Write Unit Tests: 3: Developer
+      Local Testing: 4: Developer
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+    section 2. Pull/Merge Request
+      Create PR: 2: Developer
+      Code Review: 5: Reviewer, Maintainer
+      Address Comments: 3: Developer
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+    section 3. Merge
+      Approve PR: 1: Maintainer
+      Merge to Main: 2: Maintainer
+      Release: 4: Maintainer
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+A typical code review and merge process consists of three steps:
+1. **Development**: Write code and unit tests. Run local tests to ensure the code works as expected.
+2. **Pull/Merge Request**: Create a pull/merge request. The reviewer will review the code and provide comments. The developer will address the comments and update the code. The maintainer can be the reviewer, the colleagues can also peer review the code.
+3. **Merge**: The maintainer will approve the pull/merge request and merge the code to the main branch. The maintainer will also release the new version of the code. The release process can be automated using CI/CD.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
