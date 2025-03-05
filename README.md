@@ -217,8 +217,7 @@ In this project, we will use the three-branch strategy. I give the following rea
 
 Actually, the `hotfix` branch is not necessary in this repo. We can just use the `dev` branch to fix bugs. But I prefer to keep the `hotfix` branch for the sake of clarity and simplicity. The `hotfix` branch is a good practice for future projects.
 
-
-## Code Review & Merge
+## Development, Code Review & Merge
 
 ```mermaid
 journey
@@ -241,9 +240,105 @@ journey
 ```
 
 A typical code review and merge process consists of three steps:
+
 1. **Development**: Write code and unit tests. Run local tests to ensure the code works as expected.
 2. **Pull/Merge Request**: Create a pull/merge request. The reviewer will review the code and provide comments. The developer will address the comments and update the code. The maintainer can be the reviewer, the colleagues can also peer review the code.
 3. **Merge**: The maintainer will approve the pull/merge request and merge the code to the main branch. The maintainer will also release the new version of the code. The release process can be automated using CI/CD.
 
+## Development Guidelines and Commands
 
+To contribute to development, follow these steps:
 
+**1. Create a local development branch:**
+
+```
+git checkout dev
+git pull origin dev  # Ensure the latest changes
+git checkout -b feature/<feature-name>
+```
+
+**2. Security Fixes Check**: Run [[Snyk](https://easternsawwhet.stjude.org/en/projects/Snyk-Integration)] in the local branch within the IDE to check for security vulnerabilities before committing changes.
+
+**3. Unit Testing**: Write and execute unit tests to validate individual components. Ensure test coverage meets the required threshold.
+
+**4. Commit:**
+
+```
+git add .
+git commit -m "Added new feature: <feature-description>"
+```
+
+**5. Push the branch to remote:**
+
+```
+git push origin feature/<feature-name>
+```
+
+**6. Merge changes back into dev:** Open a merge request on GitLab targeting dev. After approval, merge the branch.
+
+**7. Delete the feature branch (optional but recommended):**
+
+```
+git branch -d feature/<feature-name>
+git push origin --delete feature/<feature-name>
+```
+
+## Miscellaneous Scenarios During Development
+
+### 1. Stashing Changes Before Switching Branches
+**Scenario:** You have uncommitted changes but need to switch branches.
+
+```
+git stash
+git checkout another-branch
+```
+
+To apply the stashed changes later:
+```
+git stash pop
+```
+
+### 2. Merge
+**Scenario:** You want to combine changes from one branch into another without rewriting history.
+
+```
+git checkout dev
+git pull origin dev
+git merge feature/<feature-name>
+git push origin dev
+```
+
+### 3. Rebasing
+**Scenario:** You need to update your feature branch with the latest changes from a different branch before pushing. Applies your changes on top of another branch to maintain a linear history.
+
+**1. Ensure you are on your feature branch**
+```
+git checkout feature-branch
+```
+
+**2. Fetch the latest changes**
+```
+git fetch origin
+```
+
+**3. Rebase with main (or any different branch)**
+```
+git rebase origin/main
+```
+
+**4. If conflicts occur, resolve them manually, then continue:**
+```
+git rebase --continue
+```
+
+**5. If you want to abort the rebase process:**
+```
+git rebase --abort
+```
+
+### 4. Cherry-Picking
+**Scenario:** You want to apply a specific commit from one branch to another without merging everything.
+
+```
+git cherry-pick <commit-hash>
+```
